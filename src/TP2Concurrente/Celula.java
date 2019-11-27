@@ -16,11 +16,10 @@ public class Celula {
         this.posFila=posFila;
         this.posCol=posCol;
         this.listaAdy=new LinkedList<Celula>();
-        this.cargarListaAdy(m);
     }
     
     public void cargarListaAdy(Celula[][] m){
-        int k=this.posFila, l=this.posCol;
+        int k, l;
         //vecino superior
         if(this.posFila-1<0){
             k=m.length-1;
@@ -38,7 +37,7 @@ public class Celula {
         this.listaAdy.add(m[k][this.posCol]);
         //
         //vecino izquierdo
-        if(this.posCol-1>0){
+        if(this.posCol-1<0){
             k=m[0].length-1;
         }else{
             k=this.posCol-1;
@@ -53,45 +52,82 @@ public class Celula {
         }
         this.listaAdy.add(m[this.posFila][k]);
         //
-        //vecino diagonal sup izquierdo
-        if(this.posFila+1>0 && this.posCol<0){
-            k=m.length-1;
-            l=m[0].length-1;
+        this.cargarVecinoDiagSupIzq(m);
+        this.cargarVecinoDiagSupDer(m);
+        this.cargarVecinoDiagInfIzq(m);
+        this.cargarVecinoDiagInfDer(m);
+    }
+    
+    public void cargarVecinoDiagInfIzq(Celula[][] m){
+        int f=this.posFila;
+        int c=this.posCol;
+        if(c-1<0){
+            if(f+1>m.length-1){
+                this.listaAdy.add(m[0][m[0].length-1]);
+            }else{
+                this.listaAdy.add(m[f+1][m[0].length-1]);
+            }
         }else{
-            k=this.posFila-1;
-            l=this.posCol-1;
+            if(f+1>m.length-1){
+                this.listaAdy.add(m[0][c-1]);
+            }else{
+                this.listaAdy.add(m[f+1][c-1]);
+            }
         }
-        this.listaAdy.add(m[k][l]);
-        //
-        //vecino diag sup derecho
-        if(this.posFila-1<0 && this.posCol+1>m.length-1){
-            k=m.length-1;
-            l=0;
+    }
+    
+    public void cargarVecinoDiagInfDer(Celula[][] m){
+        int f=this.posFila;
+        int c=this.posCol;
+        if(f+1>m.length-1){
+            if(c+1>m[0].length-1){
+                this.listaAdy.add(m[0][0]);
+            }else{
+                this.listaAdy.add(m[0][c+1]);
+            }
         }else{
-            k=this.posFila-1;
-            l=this.posCol+1;
+            if(c+1>m[0].length-1){
+                this.listaAdy.add(m[f+1][0]);
+            }else{
+                this.listaAdy.add(m[f+1][c+1]);
+            }
         }
-        this.listaAdy.add(m[k][l]);
-        //
-        //vecino diagonal inferior izq
-        if(this.posFila+1>m.length-1 && this.posCol-1<0){
-            k=0;
-            l=m[0].length-1;
+    }
+    
+    public void cargarVecinoDiagSupDer(Celula[][] m){
+        int f=this.posFila;
+        int c=this.posCol;
+        if(f-1<0){
+            if(c+1>m[0].length-1){
+                this.listaAdy.add(m[m.length-1][0]);
+            }else{
+                this.listaAdy.add(m[m.length-1][c+1]);
+            }
         }else{
-            k=this.posFila+1;
-            l=this.posCol-1;
+            if(c+1>m[0].length-1){
+                this.listaAdy.add(m[f-1][0]);
+            }else{
+                this.listaAdy.add(m[f-1][c+1]);
+            }
         }
-        this.listaAdy.add(m[k][l]);
-        //
-        //vecino diagonal inferior derecho
-        if(this.posFila+1>m.length-1 && this.posCol+1>m[0].length-1){
-            k=0;
-            l=0;
+    }
+    
+    public void cargarVecinoDiagSupIzq(Celula[][] m){
+        int f=this.posFila;
+        int c=this.posCol;
+        if(f-1<0){
+            if(c-1<0){
+                this.listaAdy.add(m[m.length-1][m[0].length-1]);
+            }else{
+                this.listaAdy.add(m[m.length-1][c-1]);
+            }
         }else{
-            k=this.posFila+1;
-            l=this.posCol+1;
+            if(c-1<0){
+                this.listaAdy.add(m[f-1][m[0].length-1]);
+            }else{
+                this.listaAdy.add(m[f-1][c-1]);
+            }
         }
-        this.listaAdy.add(m[k][l]);
     }
     
     public void verificarVecinos(){
@@ -103,6 +139,7 @@ public class Celula {
                 if(this.listaAdy.get(i).obtenerEstadoActual()==1){
                     vecinosVivos++;
                 }
+                i++;
             }
             if(vecinosVivos==3){
                 this.siguienteEstado=1;
@@ -113,6 +150,7 @@ public class Celula {
                 if(this.listaAdy.get(i).obtenerEstadoActual()==1){
                     vecinosVivos++;
                 }
+                i++;
             }
             if(vecinosVivos!=2 && vecinosVivos!=3){
                 this.siguienteEstado=0;
@@ -131,9 +169,13 @@ public class Celula {
     }
     
     public char mostrarCelula(){
-        char cell='+';
+        char cell='O';
         if(this.estado==1)
-            cell='+';
+            cell='1';
         return cell;
+    }
+    
+    public void darVida(){
+        this.estado=1;
     }
 }

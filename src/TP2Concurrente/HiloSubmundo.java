@@ -24,9 +24,8 @@ public class HiloSubmundo implements Runnable{
     public void run(){
         int i, j;
         while(true){
-            
             for(i=this.rowLength; i<this.m.length;i++){
-                for(j=this.rowLength; j<10; j++){
+                for(j=this.rowLength; j<this.heightLength; j++){
                     this.m[i][j].verificarVecinos();
                 }
             }
@@ -40,7 +39,7 @@ public class HiloSubmundo implements Runnable{
             }
             
             for(i=this.rowLength; i<this.m.length;i++){
-                for(j=this.rowLength; j<10; j++){
+                for(j=this.rowLength; j<this.heightLength; j++){
                     this.m[i][j].cambiarEstado();
                 }
             }
