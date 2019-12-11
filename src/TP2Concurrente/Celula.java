@@ -12,14 +12,15 @@ public class Celula {
     
     public Celula(Celula[][] m,int estado, int posFila, int posCol) {
         this.estado=estado;
-        this.siguienteEstado=0;
+        this.siguienteEstado=estado;
         this.posFila=posFila;
         this.posCol=posCol;
         this.listaAdy=new LinkedList<Celula>();
     }
     
     public void cargarListaAdy(Celula[][] m){
-        int k, l;
+        //Se obtienen y cargan la lista de vecinos de la celula
+        int k;
         //vecino superior
         if(this.posFila-1<0){
             k=m.length-1;
@@ -131,12 +132,13 @@ public class Celula {
     }
     
     public void verificarVecinos(){
+        // Se verifica el estado de cada vecino
         int i=0;
         this.siguienteEstado=this.estado;
         if(this.estado==0){
             int vecinosVivos=0;
-            while(i<this.listaAdy.size() && vecinosVivos<=3){
-                if(this.listaAdy.get(i).obtenerEstadoActual()==1){
+            for(Celula cel: this.listaAdy){
+                if(cel.obtenerEstadoActual()==1){
                     vecinosVivos++;
                 }
                 i++;
@@ -146,8 +148,8 @@ public class Celula {
             }
         }else{ // la celula está viva
             int vecinosVivos=0;
-            while(i<this.listaAdy.size() && vecinosVivos<=3){
-                if(this.listaAdy.get(i).obtenerEstadoActual()==1){
+            for(Celula cel: this.listaAdy){
+                if(cel.obtenerEstadoActual()==1){
                     vecinosVivos++;
                 }
                 i++;
@@ -159,23 +161,37 @@ public class Celula {
     }
     
     public void cambiarEstado(){
+        // Se cambia el estado de la celula
         if(this.estado!=this.siguienteEstado){
             this.estado=this.siguienteEstado;
         }
     }
     
     public int obtenerEstadoActual(){
+        // Se obtiene el estado actual
         return this.estado;
     }
     
-    public char mostrarCelula(){
-        char cell='O';
+    public int obtenerEstadoSig(){
+        return this.siguienteEstado;
+    }
+    
+    public void imprimirVecinos(){
+        for(Celula cel: listaAdy){
+            System.out.print(" "+cel.mostrarCelula());
+        }
+    }
+    
+    public String mostrarCelula(){
+        String cell="\033[36m*";
         if(this.estado==1)
-            cell='1';
+            cell="\033[31m1";
         return cell;
     }
     
     public void darVida(){
+        // Metodo usado para dar vida a un conjunto de celulas inciales
         this.estado=1;
+        this.siguienteEstado=1;
     }
 }
